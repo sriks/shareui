@@ -1,3 +1,8 @@
+/*!
+  Class to invoke share ui in harmattan.
+  Referenced from sharebear example.
+  **/
+
 #include <QString>
 #include <QDebug>
 #include <MDataUri>
@@ -5,33 +10,32 @@
 #include "ShareUi.h"
 
 const QString TITLE("title");
-const QString DESCRIPTION("description");
-const QString TYPE_TEXT_URL("text/x-url");
+const QString DESCRIPTION("description"); // old impl
+const QString TYPE_TEXT_URL("text/x-url"); // old impl
 
 ShareUi::ShareUi(QObject *parent) :
     QObject(parent) {}
 
-bool ShareUi::shareUrl(QString link, QString title, QString description) {
-    qDebug()<<Q_FUNC_INFO<< "Make data URI from"
-             << link << title << description;
-//    QString link = "http://forum.nokia.com";
-//    QString title = "Forum Nokia";
-//    QString desc = "Support for Nokia Developers";
+/*!
+  Shares the content using Harmattan share framework.
+  **/
+bool ShareUi::share(QString title, QString description, QString url) {
 
     bool res = false;
     MDataUri duri;
     duri.setMimeType(TYPE_TEXT_URL);
-    duri.setTextData(link);
-    duri.setAttribute(TITLE, title);
-    duri.setAttribute(DESCRIPTION,description);
 
+// Old implementation for reference
+//    duri.setTextData(url);
+//    duri.setAttribute(TITLE, title);
+//    duri.setAttribute(DESCRIPTION,description);
+
+    QString content = title+"\n"+description+"\n"+url;
+    duri.setTextData(content);
     if (duri.isValid()) {
         QStringList items;
         items << duri.toString();
-        qDebug() << Q_FUNC_INFO<<"URI:" << items.join (" ");
-
         ShareUiInterface shareIf("com.nokia.ShareUi");
-           // Check if interface is valid
         res = shareIf.isValid();
         if (res)
             shareIf.share(items);
