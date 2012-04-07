@@ -30,7 +30,8 @@ bool ShareUi::share(QString title, QString description, QString url) {
 //    duri.setAttribute(TITLE, title);
 //    duri.setAttribute(DESCRIPTION,description);
 
-    QString content = title+"\n"+description+"\n"+url;
+    QString content = title+"\n"+description +
+                      ((!description.isEmpty())?("\n"):(""))+url;
     duri.setTextData(content);
     if (duri.isValid()) {
         QStringList items;
